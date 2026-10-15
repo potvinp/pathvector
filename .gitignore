@@ -7,6 +7,9 @@ output/*
 # JetBrains configs
 .idea/
 
+# VScode configs
+.vscode/
+
 # Release
 dist/
 build/
