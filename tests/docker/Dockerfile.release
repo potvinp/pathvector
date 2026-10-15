@@ -1,0 +1,15 @@
+# Release dry-run image: GoReleaser + the PDF toolchain used by `go generate`
+# (pandoc, xelatex). Used by `make docker-release-snapshot`.
+ARG GO_VERSION=1.24
+FROM goreleaser/goreleaser:latest AS goreleaser
+
+FROM golang:${GO_VERSION}-bookworm
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      pandoc texlive-xetex texlive-latex-recommended lmodern rsync git curl ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+COPY --from=goreleaser /usr/bin/goreleaser /usr/local/bin/goreleaser
+RUN git config --global --add safe.directory '*'
+WORKDIR /work
+ENTRYPOINT ["/usr/local/bin/release-snapshot.sh"]
+COPY release-snapshot.sh /usr/local/bin/release-snapshot.sh

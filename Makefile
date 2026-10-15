@@ -61,7 +61,16 @@ docker-test:
 		-v "$(CURDIR)":/src -v pathvector-gocache:/go/pkg/mod \
 		$(UNIT_TEST_IMAGE) $(if $(DOCKER_TEST_CMD),$(DOCKER_TEST_CMD),make test)
 
+# Release dry run in Docker: GoReleaser --snapshot --skip=publish from a copy
+# of the tree, artifacts land in ./dist. Skips the vendorbuild publisher (it
+# needs Docker and signing keys), so vendor packages are not built.
+RELEASE_IMAGE ?= pathvector-release
+
+docker-release-snapshot:
+	docker build $(DOCKER_BUILD_ARGS) -f tests/docker/Dockerfile.release -t $(RELEASE_IMAGE) tests/docker
+	docker run --rm -v "$(CURDIR)":/src -v pathvector-gocache:/go/pkg/mod $(RELEASE_IMAGE)
+
 # Everything: unit tests, then the BIRD version matrix
 docker-test-all: docker-test bird-matrix
 
-.PHONY: bird-matrix bird-matrix-local docker-test docker-test-all
+.PHONY: bird-matrix bird-matrix-local docker-test docker-test-all docker-release-snapshot
