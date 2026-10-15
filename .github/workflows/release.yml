@@ -29,14 +29,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y pandoc texlive-xetex
 
-      - name: Store signing files
-        run: |
-          echo "$JUNIPER_KEY" | base64 -d > vendorbuild/juniper/key.pem
-          echo "$JUNIPER_CERT" | base64 -d > vendorbuild/juniper/cert.pem
-        shell: bash
-        env:
-          JUNIPER_KEY: ${{ secrets.JUNIPER_KEY }}
-          JUNIPER_CERT: ${{ secrets.JUNIPER_CERT }}
+      # Vendor platform builds are disabled (see .goreleaser.yml)
+      # - name: Store signing files
+      #   run: |
+      #     echo "$JUNIPER_KEY" | base64 -d > vendorbuild/juniper/key.pem
+      #     echo "$JUNIPER_CERT" | base64 -d > vendorbuild/juniper/cert.pem
+      #   shell: bash
+      #   env:
+      #     JUNIPER_KEY: ${{ secrets.JUNIPER_KEY }}
+      #     JUNIPER_CERT: ${{ secrets.JUNIPER_CERT }}
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2

@@ -41,11 +41,14 @@ nfpms:
       - rpm
 
 publishers:
+  # Vendor platform builds (Arista, Juniper, Cisco, MikroTik) are disabled. Uncomment this publisher and the
+  # matching extra_files globs below to re-enable them.
+  #
   # The vendorbuild publisher isn't really a publisher at all. It's a hack to run the vendorbuild/build.sh script
   # after binaries and packages are built but before the release step so packages for vendor platforms can be
   # added to the release.
-  - name: vendorbuild
-    cmd: ./vendorbuild/build.sh
+  # - name: vendorbuild
+  #   cmd: ./vendorbuild/build.sh
 
   - name: fury.io
     ids:
@@ -55,8 +58,8 @@ publishers:
 
 release:
   extra_files:
-    - glob: dist/pathvector-*arista*
-    - glob: dist/pathvector-*juniper*
-    - glob: dist/pathvector-*cisco*
-    - glob: dist/pathvector-*mikrotik*
+    # - glob: dist/pathvector-*arista*
+    # - glob: dist/pathvector-*juniper*
+    # - glob: dist/pathvector-*cisco*
+    # - glob: dist/pathvector-*mikrotik*
     - glob: pathvector-*-release.pdf
