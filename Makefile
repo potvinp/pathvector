@@ -50,4 +50,18 @@ bird-matrix-local:
 	tests/bird-matrix/build-bird-versions.sh $(BIRD_VERSIONS)
 	tests/bird-matrix/run-tests.sh $(addprefix tests/bird-matrix/,$(BIRD_VERSIONS))
 
-.PHONY: bird-matrix bird-matrix-local
+# Unit tests in Docker: no sudo, dummy interface or Python needed on the host
+# (see tests/docker/Dockerfile). The source tree is bind mounted.
+UNIT_TEST_IMAGE ?= pathvector-unit-test
+
+docker-test:
+	docker build $(DOCKER_BUILD_ARGS) -f tests/docker/Dockerfile -t $(UNIT_TEST_IMAGE) tests/docker
+	docker run --rm --cap-add NET_ADMIN \
+		--sysctl net.ipv4.ping_group_range="0 2147483647" \
+		-v "$(CURDIR)":/src -v pathvector-gocache:/go/pkg/mod \
+		$(UNIT_TEST_IMAGE) $(if $(DOCKER_TEST_CMD),$(DOCKER_TEST_CMD),make test)
+
+# Everything: unit tests, then the BIRD version matrix
+docker-test-all: docker-test bird-matrix
+
+.PHONY: bird-matrix bird-matrix-local docker-test docker-test-all
