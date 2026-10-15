@@ -33,7 +33,7 @@ nfpms:
     license: MIT
     section: utils
     priority: extra
-    builds:
+    ids:
       - pathvector
 
     formats:
