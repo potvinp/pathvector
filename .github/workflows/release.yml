@@ -46,4 +46,4 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FURY_TOKEN: ${{ secrets.FURY_TOKEN }}
+          # FURY_TOKEN: ${{ secrets.FURY_TOKEN }} # fury.io upload is disabled (see .goreleaser.yml)

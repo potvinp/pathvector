@@ -40,21 +40,20 @@ nfpms:
       - deb
       - rpm
 
-publishers:
-  # Vendor platform builds (Arista, Juniper, Cisco, MikroTik) are disabled. Uncomment this publisher and the
-  # matching extra_files globs below to re-enable them.
-  #
-  # The vendorbuild publisher isn't really a publisher at all. It's a hack to run the vendorbuild/build.sh script
-  # after binaries and packages are built but before the release step so packages for vendor platforms can be
-  # added to the release.
-  # - name: vendorbuild
-  #   cmd: ./vendorbuild/build.sh
-
-  - name: fury.io
-    ids:
-      - pathvector
-    dir: "{{ dir .ArtifactPath }}"
-    cmd: curl -s -F package=@{{ .ArtifactName }} https://{{ .Env.FURY_TOKEN }}@push.fury.io/natesales/
+# Publishers are disabled: the vendorbuild publisher (vendor platform builds) and the fury.io package upload.
+# Uncomment to re-enable.
+# publishers:
+#   # The vendorbuild publisher isn't really a publisher at all. It's a hack to run the vendorbuild/build.sh script
+#   # after binaries and packages are built but before the release step so packages for vendor platforms can be
+#   # added to the release. Also uncomment the matching extra_files globs below.
+#   - name: vendorbuild
+#     cmd: ./vendorbuild/build.sh
+#
+#   - name: fury.io
+#     ids:
+#       - pathvector
+#     dir: "{{ dir .ArtifactPath }}"
+#     cmd: curl -s -F package=@{{ .ArtifactName }} https://{{ .Env.FURY_TOKEN }}@push.fury.io/natesales/
 
 release:
   extra_files:
